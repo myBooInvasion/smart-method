@@ -193,11 +193,11 @@ function AlternatifUserComp() {
   return (
     <div className='container-sm my-3'>
       <div className='row mb-4 align-items-center'>
-        <div className='col-auto text-start px-0'>
+        <div className='col-6 col-sm-auto text-start'>
           <CustomTextField variant='outlined' size='small' label='Nama author' autoFocus
             value={author} onChange={e => setAuthor(e.target.value)} />
         </div>
-        <div className='col text-start'>
+        <div className='col-6 col-sm text-start'>
           <CustomLoadingButton variant='contained' sx={{ textTransform: 'capitalize' }} loading={loading}
             onClick={() => generateData(100)} startIcon={<DataObjectRounded />} loadingPosition='start'>
             Random data
@@ -208,10 +208,10 @@ function AlternatifUserComp() {
         <div className='col-12 mt-0'>
           <div className='row align-items-center rounded-top py-2' style={{ backgroundColor: '#379fff' }}>
             <div className='col'>
-              <Typography variant='subtitle1' color='white' textAlign='left'>Masukan data alternatif</Typography>
+              <Typography variant='subtitle1' color='white' textAlign={{xs: 'center', sm: 'left'}}>Masukan data alternatif</Typography>
             </div>
             <div className='col-12 col-sm-4 col-lg-3'>
-              <Stack direction='row' spacing={2} justifyContent='flex-end'>
+              <Stack direction='row' spacing={2} justifyContent={{xs: 'center', sm: 'flex-end'}}>
                 <Button startIcon={<AddCircleOutlineRounded />} sx={{ color: 'white', textTransform: 'capitalize' }}
                   onClick={addHandler}>
                   Add

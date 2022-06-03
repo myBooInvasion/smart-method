@@ -10,6 +10,7 @@ import ContentComp from './components/content/ContentComp';
 import AlternatifUserComp from './components/content/AlternatifUserComp';
 import ResultsComp from './components/result/ResultsComp';
 import './App.css';
+import SiderMobile from './components/sider/SiderMobile';
 
 const theme = createTheme({
   breakpoints: {
@@ -25,6 +26,17 @@ const theme = createTheme({
 });
 
 class App extends React.Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      drawer: false,
+    }
+  }
+
+  openCloseDrawer = () => {
+    this.setState({drawer: !this.state.drawer});
+  }
 
   render() {
     return (
@@ -32,9 +44,10 @@ class App extends React.Component {
         <BrowserRouter>
           <div className="App box-wrapper d-flex justify-content-end w-100 min-vh-100" style={{backgroundColor: '#202332'}}>
             <LeftSiderComp />
+            <SiderMobile open={this.state.drawer} toggle={this.openCloseDrawer} />
             <Routes>
               {/* core content */}
-              <Route path='/' element={<ContentComp  />}>
+              <Route path='/' element={<ContentComp toggleDrawer={this.openCloseDrawer} />}>
                 <Route path='' element={<AlternatifUserComp />} />
                 <Route path='results' element={<ResultsComp />} />
               </Route>

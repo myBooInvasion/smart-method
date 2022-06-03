@@ -7,7 +7,7 @@ import {
 } from '@mui/icons-material';
 import { Outlet } from 'react-router-dom';
 
-function ContentComp() {
+function ContentComp(props) {
 
     let [aside, setAside] = useState(null);
     useEffect(() => {
@@ -20,10 +20,10 @@ function ContentComp() {
             className='container-fluid content mx-0' sx={{width: {xs: '100%', lg: `calc(100% - ${aside + 1}px)`}}}>
             <div className='row align-items-center py-2' style={{backgroundColor: '#2b2c3e'}}>
                 <div className='col text-start'>
-                    <IconButton sx={{ display: { md: 'none' }, color: '#f3f3f4' }}>
+                    <IconButton sx={{ display: { lg: 'none' }, color: '#f3f3f4' }} onClick={() => props.toggleDrawer()}>
                         <MenuRounded />
                     </IconButton>
-                    <IconButton sx={{ display: { xs: 'none', md: 'inline-flex' }, color: '#f3f3f4' }}>
+                    <IconButton sx={{ display: { xs: 'none', lg: 'inline-flex' }, color: '#f3f3f4' }}>
                         <MenuOpenRounded />
                     </IconButton>
                 </div>
