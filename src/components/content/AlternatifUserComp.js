@@ -75,12 +75,27 @@ function AlternatifUserComp() {
   const [dataSiswa, setDataSiswa] = useState({
     nama: '',
     nim: '',
-    ipk: '',
+    ipk: 2.5,
     gaji: '',
     tanggungan: '',
   });
 
   const changeHandler = (property, value, action) => {
+    if (property === 'ipk') {
+      if (value < 2.5 || value === '') {
+        value = 2.5;
+      } else if (value > 4) {
+        value = 4;
+      } else {
+        value = parseFloat(value);
+      }
+    } else if (property === 'gaji') {
+      if (value === '' || value < 0) {
+        value = 0;
+      } else {
+        value = parseInt(value);
+      }
+    }
     switch (action.type) {
       case 'BASIC_FORM':
         return setDataSiswa({ ...dataSiswa, [property]: value });
@@ -93,7 +108,7 @@ function AlternatifUserComp() {
     }
   }
   const addHandler = () => {
-    if (Object.values(dataSiswa).includes(('' || 0))) {
+    if (Object.values(dataSiswa).includes((''))) {
       toast.warning('Data tidak lengkap', {
         position: 'top-center',
         autoClose: 1500,
@@ -113,7 +128,7 @@ function AlternatifUserComp() {
     setDataSiswa(Object.assign(dataSiswa, {
       nama: '',
       nim: '',
-      ipk: '',
+      ipk: 2.5,
       gaji: '',
       tanggungan: '',
     }));
@@ -167,7 +182,7 @@ function AlternatifUserComp() {
     setLoading(true);
     for (let item = 0; item < range; item++) {
       store.push({
-        nim: '101910' + Math.round(Math.random() * 100),
+        nim: '101910' + (item + 1),
         nama: 'A'.concat(item + 1),
         ipk: (function () {
           let ipkValue = (Math.random() * 4).toFixed(2);
@@ -294,13 +309,13 @@ function FormAlternatif(props) {
       </div>
       <div className='col-4 col-sm-2 col-lg-3 col-xl'>
         <CustomTextField required type='number' label='IPK' fullWidth color='primary' size='small' variant='standard'
-          value={props.value.ipk} inputProps={{min: 2.5}}
-          onChange={e => props.change('ipk', parseFloat(e.target.value), { type: 'BASIC_FORM' })} />
+          value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}}
+          onChange={e => props.change('ipk', e.target.value, { type: 'BASIC_FORM' })} />
       </div>
       <div className='col-6 col-sm-6 col-lg-5 col-xl-2'>
         <CustomTextField required type='number' label='Gaji orangtua' fullWidth color='primary' size='small' variant='standard'
-          value={props.value.gaji} inputProps={{min: 0}}
-          onChange={e => props.change('gaji', parseInt(e.target.value), { type: 'BASIC_FORM' })} />
+          value={props.value.gaji} inputProps={{min: 0, step: 1000}}
+          onChange={e => props.change('gaji', e.target.value, { type: 'BASIC_FORM' })} />
       </div>
       <div className='col-6 col-sm-4 col-lg-4 col-xl-2 text-start'>
         <CustomFormControl variant='standard' required fullWidth size='small'>
@@ -337,11 +352,11 @@ function ModalAlternatif(props) {
             value={props.value.nim}
             onChange={e => props.change('nim', e.target.value, { type: 'MODAL_FORM' })} />
           <TextField type='number' label='IPK' variant='standard' color='primary' size='small' fullWidth
-            value={props.value.ipk} inputProps={{min: 2.5}}
-            onChange={e => props.change('ipk', parseFloat(e.target.value), { type: 'MODAL_FORM' })} />
+            value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}}
+            onChange={e => props.change('ipk', e.target.value, { type: 'MODAL_FORM' })} />
           <TextField type='number' label='Gaji orangtua' variant='standard' color='primary' size='small' fullWidth
-            value={props.value.gaji} inputProps={{min: 0}}
-            onChange={e => props.change('gaji', parseInt(e.target.value), { type: 'MODAL_FORM' })} />
+            value={props.value.gaji} inputProps={{min: 0, step: 1000}}
+            onChange={e => props.change('gaji', e.target.value, { type: 'MODAL_FORM' })} />
           <FormControl variant='standard' required fullWidth size='small'>
             <InputLabel id='select-tanggungan'>Tanggungan</InputLabel>
             <Select
