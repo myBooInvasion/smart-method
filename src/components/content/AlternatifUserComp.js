@@ -80,9 +80,10 @@ function AlternatifUserComp() {
     nama: '',
     nim: '',
     ipk: 2.5,
-    gaji: '',
+    gaji: 500000,
     tanggungan: '',
   });
+  console.log(dataSiswa, alternatif);
 
   const changeHandler = (property, value, action) => {
     if (property === 'ipk') {
@@ -143,7 +144,7 @@ function AlternatifUserComp() {
       nama: '',
       nim: '',
       ipk: 2.5,
-      gaji: '',
+      gaji: 500000,
       tanggungan: '',
     }));
   }
@@ -337,7 +338,7 @@ function FormAlternatif(props) {
       <div className='col-6 col-sm-6 col-lg-5 col-xl-2'>
         <CustomTextField required type='number' label='Gaji orangtua' fullWidth color='primary' size='small' variant='standard'
           value={props.value.gaji} inputProps={{min: 0, step: 1000}} error={props.error.gaji}
-          onChange={e => props.change('gaji', e.target.value, { type: 'BASIC_FORM' })} />
+          onChange={e => props.change('gaji', parseInt(e.target.value), { type: 'BASIC_FORM' })} />
       </div>
       <div className='col-6 col-sm-4 col-lg-4 col-xl-2 text-start'>
         <CustomFormControl variant='standard' required fullWidth size='small'>
@@ -375,10 +376,10 @@ function ModalAlternatif(props) {
             onChange={e => props.change('nim', e.target.value, { type: 'MODAL_FORM' })} />
           <TextField type='number' label='IPK' variant='standard' color='primary' size='small' fullWidth
             value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}} error={props.error.ipk}
-            onChange={e => props.change('ipk', e.target.value, { type: 'MODAL_FORM' })} />
+            onChange={e => props.change('ipk', parseFloat(e.target.value), { type: 'MODAL_FORM' })} />
           <TextField type='number' label='Gaji orangtua' variant='standard' color='primary' size='small' fullWidth
             value={props.value.gaji} inputProps={{min: 0, step: 1000}} error={props.error.gaji}
-            onChange={e => props.change('gaji', e.target.value, { type: 'MODAL_FORM' })} />
+            onChange={e => props.change('gaji', parseInt(e.target.value), { type: 'MODAL_FORM' })} />
           <FormControl variant='standard' required fullWidth size='small'>
             <InputLabel id='select-tanggungan'>Tanggungan</InputLabel>
             <Select
