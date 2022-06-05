@@ -27,9 +27,6 @@ function ContentComp(props) {
                         <MenuOpenRounded />
                     </IconButton>
                 </div>
-                <div className='col text-start'>
-                    <h5>Ga tau nanti diisi apa...</h5>
-                </div>
             </div>
 
             <Outlet />

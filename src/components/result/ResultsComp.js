@@ -17,20 +17,20 @@ const CustomFormControl = styled(FormControl)({
   '& .MuiFormLabel-root': {
     color: '#7d7e88',
     '&.Mui-focused': {
-      color: '#379fff',
+      color: 'white',
     }
   },
   '& .MuiOutlinedInput-root': {
-    color: '#7d7e88',
-    '&.Mui-focused, &.Mui-focused:hover fieldset': {
-      color: '#379fff',
-    },
+    color: 'white',
     '& .MuiSelect-icon, &.Mui-disabled': {
       color: '#7d7e88',
     },
-    '&:hover fieldset': {
+    '& fieldset': {
       borderColor: '#7d7e88',
-    }
+    },
+  },
+  '& :.MuiOutlinedInput-root:hover fieldset': {
+    borderColor: '2px solid red',
   }
 })
 
@@ -174,7 +174,7 @@ function ResultsComp() {
                   }): <th>Tolong pilih author untuk menampilkan hasil...</th>}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="table-group-divider">
                 {result.alternatif.length !== 0 && result.alternatif.map((item, id) => {
                   return (
                     <tr key={id}>

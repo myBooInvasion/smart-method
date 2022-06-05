@@ -29,7 +29,7 @@ function SiderMobile(props) {
                                     to={id === 0 ? '/' : '/'.concat(listText[id]).toLowerCase()}
                                     className={({ isActive }) => isActive ?
                                         'w-100 text-decoration-none text-secondary text-white active' : 'w-100 text-decoration-none text-white'} style={{ borderRadius: '.25rem' }}>
-                                    <ListItemButton sx={{ borderRadius: 1 }}>
+                                    <ListItemButton sx={{ borderRadius: 1 }} onClick={() => props.toggle()}>
                                         <ListItemIcon sx={{ minWidth: 40 }}>
                                             {item}
                                         </ListItemIcon>

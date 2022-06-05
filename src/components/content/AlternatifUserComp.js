@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Typography, TextField, FormControl, InputLabel, Select, MenuItem, Button, Stack, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
+  Typography, TextField, FormControl, InputLabel, Select, MenuItem, Button, Stack, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import {
-  AddCircleOutlineRounded, DeleteOutlineRounded, BookmarkAddedOutlined, DataObjectRounded
+  AddCircleOutlineRounded, DeleteOutlineRounded, BookmarkAddedOutlined, DataObjectRounded, ModeEditRounded, DeleteForeverRounded
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { styled } from '@mui/material/styles';
@@ -18,7 +18,7 @@ const CustomTextField = styled(TextField)({
   },
   '& .MuiInputBase-root': {
     '& input': {
-      color: '#474957',
+      color: 'white',
     },
     '&.Mui-focused input': {
       color: '#ffffff',
@@ -29,10 +29,10 @@ const CustomTextField = styled(TextField)({
     '&:hover:before': {
       borderBottom: '2px solid #474957',
     },
-    '&::before': {
+    '&:before': {
       borderBottom: '1px solid #474957',
     },
-    '&::after': {
+    '&:after': {
       borderBottom: '2px solid #ffffff',
     }
   },
@@ -46,7 +46,19 @@ const CustomFormControl = styled(FormControl)({
   },
   '& .MuiInputBase-root': {
     '& .MuiSelect-select': {
-      color: '#474957',
+      color: 'white',
+    },
+    '&.Mui-focused .MuiSelect-select': {
+      backgroundColor: 'transparent',
+    },
+    '&:before': {
+      borderBottom: '1px solid #474957'
+    },
+    '&:hover:before': {
+      borderBottom: '2px solid #474957',
+    },
+    '&.Mui-focused:after': {
+      borderBottom: '2px solid white'
     }
   }
 })
@@ -67,7 +79,6 @@ const CustomLoadingButton = styled(LoadingButton)({
 
 function AlternatifUserComp() {
   const [id, setId] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState({
     ipk: false,
     gaji: false,
@@ -83,7 +94,6 @@ function AlternatifUserComp() {
     gaji: 500000,
     tanggungan: '',
   });
-  console.log(dataSiswa, alternatif);
 
   const changeHandler = (property, value, action) => {
     if (property === 'ipk') {
@@ -202,7 +212,6 @@ function AlternatifUserComp() {
   }
   const generateData = (range) => {
     let store = []
-    setLoading(true);
     for (let item = 0; item < range; item++) {
       store.push({
         nim: '101910' + (item + 1),
@@ -225,7 +234,6 @@ function AlternatifUserComp() {
       });
     }
     setAlternatif(store);
-    setLoading(false);
   }
 
   return (
@@ -236,8 +244,8 @@ function AlternatifUserComp() {
             value={author} onChange={e => setAuthor(e.target.value)} />
         </div>
         <div className='col-6 col-sm text-start'>
-          <CustomLoadingButton variant='contained' sx={{ textTransform: 'capitalize' }} loading={loading}
-            onClick={() => generateData(100)} startIcon={<DataObjectRounded />} loadingPosition='start'>
+          <CustomLoadingButton variant='contained' sx={{ textTransform: 'capitalize' }} onClick={() => generateData(100)}
+          startIcon={<DataObjectRounded />} loadingPosition='start'>
             Random data
           </CustomLoadingButton>
         </div>
@@ -269,7 +277,7 @@ function AlternatifUserComp() {
       </div>
 
       <div className='row gy-3 my-3 pb-3' style={{ backgroundColor: '#2b2c3e' }}>
-        <div className='col-12 text-start table-responsive' style={{ maxHeight: '50vh' }}>
+        <div className='col-12 text-center table-responsive' style={{ maxHeight: '45vh' }}>
           <table className='table text-white'>
             <thead>
               <tr>
@@ -281,7 +289,7 @@ function AlternatifUserComp() {
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="table-group-divider">
               {alternatif.length !== 0 ? alternatif.map((item, index) => {
                 return (
                   <tr key={index}>
@@ -291,10 +299,14 @@ function AlternatifUserComp() {
                     <td>{item.gaji}</td>
                     <td>{item.tanggungan}</td>
                     <td>
-                      <Stack direction='row' spacing={1}>
-                        <Button onClick={() => editModal(index)} color='primary'>edit</Button>
-                        <Button onClick={() => deleteHandler(index)} color='warning'>delete</Button>
-                      </Stack>
+                    <Stack direction='row' spacing={1} sx={{display: 'inline-flex'}}>
+                      <IconButton color='success' onClick={() => editModal(index)}>
+                        <ModeEditRounded />
+                      </IconButton>
+                      <IconButton color='warning' onClick={() => deleteHandler(index)}>
+                        <DeleteForeverRounded />
+                      </IconButton>
+                    </Stack>
                     </td>
                   </tr>
                 );
@@ -332,12 +344,14 @@ function FormAlternatif(props) {
       </div>
       <div className='col-4 col-sm-2 col-lg-3 col-xl'>
         <CustomTextField required type='number' label='IPK' fullWidth color='primary' size='small' variant='standard'
-          value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}} error={props.error.ipk}
+          value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}}
+          error={props.error.ipk} helperText={props.error.ipk && 'Value tidak valid'}
           onChange={e => props.change('ipk', parseFloat(e.target.value), { type: 'BASIC_FORM' })} />
       </div>
       <div className='col-6 col-sm-6 col-lg-5 col-xl-2'>
         <CustomTextField required type='number' label='Gaji orangtua' fullWidth color='primary' size='small' variant='standard'
-          value={props.value.gaji} inputProps={{min: 0, step: 1000}} error={props.error.gaji}
+          value={props.value.gaji} inputProps={{min: 0, step: 1000}}
+          error={props.error.gaji} helperText={props.error.gaji && 'Value tidak valid'}
           onChange={e => props.change('gaji', parseInt(e.target.value), { type: 'BASIC_FORM' })} />
       </div>
       <div className='col-6 col-sm-4 col-lg-4 col-xl-2 text-start'>
@@ -375,10 +389,12 @@ function ModalAlternatif(props) {
             value={props.value.nim}
             onChange={e => props.change('nim', e.target.value, { type: 'MODAL_FORM' })} />
           <TextField type='number' label='IPK' variant='standard' color='primary' size='small' fullWidth
-            value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}} error={props.error.ipk}
+            value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}}
+            error={props.error.ipk} helperText={props.error.ipk && 'Value tidak valid'}
             onChange={e => props.change('ipk', parseFloat(e.target.value), { type: 'MODAL_FORM' })} />
           <TextField type='number' label='Gaji orangtua' variant='standard' color='primary' size='small' fullWidth
-            value={props.value.gaji} inputProps={{min: 0, step: 1000}} error={props.error.gaji}
+            value={props.value.gaji} inputProps={{min: 0, step: 1000}}
+            error={props.error.gaji} helperText={props.error.gaji && 'Value tidak valid'}
             onChange={e => props.change('gaji', parseInt(e.target.value), { type: 'MODAL_FORM' })} />
           <FormControl variant='standard' required fullWidth size='small'>
             <InputLabel id='select-tanggungan'>Tanggungan</InputLabel>
