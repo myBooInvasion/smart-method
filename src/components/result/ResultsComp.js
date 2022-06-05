@@ -44,7 +44,7 @@ function ResultsComp() {
   });
 
   useEffect(() => {
-    fetch('https://smart-method.herokuapp.com/alternatif/results', {
+    fetch('http://localhost:8000/alternatif/results', {
       method: 'GET',
     })
       .then(result => result.json())
@@ -53,7 +53,7 @@ function ResultsComp() {
   }, []);
 
   const clickProject = (event) => {
-    fetch(`https://smart-method.herokuapp.com/alternatif/utilitas/${event.target.value}`, {
+    fetch(`http://localhost:8000/alternatif/utilitas/${event.target.value}`, {
       method: 'GET',
     })
       .then(result => result.json())

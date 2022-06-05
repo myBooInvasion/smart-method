@@ -68,6 +68,10 @@ const CustomLoadingButton = styled(LoadingButton)({
 function AlternatifUserComp() {
   const [id, setId] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [failed, setFailed] = useState({
+    ipk: false,
+    gaji: false,
+  });
   const [modal, setModal] = useState(false);
   const [modalText, setModalText] = useState({});
   const [author, setAuthor] = useState('');
@@ -82,18 +86,22 @@ function AlternatifUserComp() {
 
   const changeHandler = (property, value, action) => {
     if (property === 'ipk') {
-      if (value < 2.5 || value === '') {
-        value = 2.5;
-      } else if (value > 4) {
-        value = 4;
+      if (value < 2.5 || value > 4) {
+        setFailed({...failed, ipk: true});
+      } else if (isNaN(value)) {
+        setFailed({...failed, ipk: true});
+        value = ''
       } else {
-        value = parseFloat(value);
+        setFailed({...failed, ipk: false});
       }
     } else if (property === 'gaji') {
-      if (value === '' || value < 0) {
-        value = 0;
+      if (value <= 0 || value > 5000000) {
+        setFailed({...failed, gaji: true});
+      } else if (isNaN(value)) {
+        setFailed({...failed, gaji: true});
+        value = ''
       } else {
-        value = parseInt(value);
+        setFailed({...failed, gaji: false});
       }
     }
     switch (action.type) {
@@ -113,7 +121,13 @@ function AlternatifUserComp() {
         position: 'top-center',
         autoClose: 1500,
         closeButton: false,
-      })
+      });
+    } else if (failed.ipk || failed.gaji) {
+      toast.warning('Periksa inputan anda kembali', {
+        position: 'top-center',
+        autoClose: 1500,
+        closeButton: false,
+      });
     } else {
       setAlternatif([...alternatif, dataSiswa]);
     }
@@ -139,8 +153,16 @@ function AlternatifUserComp() {
     setModal(!modal);
   }
   const saveModal = index => {
-    alternatif[index] = modalText;
-    setModal(!modal);
+    if (failed.ipk || failed.gaji) {
+      toast.warning('Periksa inputan anda kembali', {
+        position: 'top-center',
+        autoClose: 1500,
+        closeButton: false,
+      });
+    } else {
+      alternatif[index] = modalText;
+      setModal(!modal);
+    }
   }
   const saveData = () => {
     if (author === '') {
@@ -150,7 +172,7 @@ function AlternatifUserComp() {
         closeButton: false,
       })
     } else {
-      fetch('https://smart-method.herokuapp.com/alternatif/create', {
+      fetch('http://localhost:8000/alternatif/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -223,10 +245,10 @@ function AlternatifUserComp() {
         <div className='col-12 mt-0'>
           <div className='row align-items-center rounded-top py-2' style={{ backgroundColor: '#379fff' }}>
             <div className='col'>
-              <Typography variant='subtitle1' color='white' textAlign={{xs: 'center', sm: 'left'}}>Masukan data alternatif</Typography>
+              <Typography variant='subtitle1' color='white' textAlign={{ xs: 'center', sm: 'left' }}>Masukan data alternatif</Typography>
             </div>
             <div className='col-12 col-sm-4 col-lg-3'>
-              <Stack direction='row' spacing={2} justifyContent={{xs: 'center', sm: 'flex-end'}}>
+              <Stack direction='row' spacing={2} justifyContent={{ xs: 'center', sm: 'flex-end' }}>
                 <Button startIcon={<AddCircleOutlineRounded />} sx={{ color: 'white', textTransform: 'capitalize' }}
                   onClick={addHandler}>
                   Add
@@ -241,7 +263,7 @@ function AlternatifUserComp() {
         </div>
 
         <div className='col-12'>
-          <FormAlternatif value={dataSiswa} change={changeHandler} />
+          <FormAlternatif value={dataSiswa} change={changeHandler} error={failed} />
         </div>
       </div>
 
@@ -287,7 +309,7 @@ function AlternatifUserComp() {
           </CustomDisableButton>
         </div>
       </div>
-      <ModalAlternatif value={modalText} open={modal} close={setModal} modalIndex={id} change={changeHandler} save={saveModal} />
+      <ModalAlternatif value={modalText} open={modal} close={setModal} modalIndex={id} change={changeHandler} save={saveModal} error={failed} />
     </div>
   );
 }
@@ -300,7 +322,7 @@ function FormAlternatif(props) {
       <div className='col-12 col-sm-6 col-lg-5 col-xl-3'>
         <CustomTextField required label='Nama' fullWidth size='small' variant='standard' autoComplete='off'
           value={props.value.nama}
-          onChange={e => props.change('nama', e.target.value, { type: 'BASIC_FORM' }, props.control)} />
+          onChange={e => props.change('nama', e.target.value, { type: 'BASIC_FORM' })} />
       </div>
       <div className='col-8 col-sm-6 col-lg-4 col-xl-3'>
         <CustomTextField required type='number' label='NIM' fullWidth color='primary' size='small' variant='standard'
@@ -309,12 +331,12 @@ function FormAlternatif(props) {
       </div>
       <div className='col-4 col-sm-2 col-lg-3 col-xl'>
         <CustomTextField required type='number' label='IPK' fullWidth color='primary' size='small' variant='standard'
-          value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}}
-          onChange={e => props.change('ipk', e.target.value, { type: 'BASIC_FORM' })} />
+          value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}} error={props.error.ipk}
+          onChange={e => props.change('ipk', parseFloat(e.target.value), { type: 'BASIC_FORM' })} />
       </div>
       <div className='col-6 col-sm-6 col-lg-5 col-xl-2'>
         <CustomTextField required type='number' label='Gaji orangtua' fullWidth color='primary' size='small' variant='standard'
-          value={props.value.gaji} inputProps={{min: 0, step: 1000}}
+          value={props.value.gaji} inputProps={{min: 0, step: 1000}} error={props.error.gaji}
           onChange={e => props.change('gaji', e.target.value, { type: 'BASIC_FORM' })} />
       </div>
       <div className='col-6 col-sm-4 col-lg-4 col-xl-2 text-start'>
@@ -352,10 +374,10 @@ function ModalAlternatif(props) {
             value={props.value.nim}
             onChange={e => props.change('nim', e.target.value, { type: 'MODAL_FORM' })} />
           <TextField type='number' label='IPK' variant='standard' color='primary' size='small' fullWidth
-            value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}}
+            value={props.value.ipk} inputProps={{min: 2.5, max: 4, step: 0.1}} error={props.error.ipk}
             onChange={e => props.change('ipk', e.target.value, { type: 'MODAL_FORM' })} />
           <TextField type='number' label='Gaji orangtua' variant='standard' color='primary' size='small' fullWidth
-            value={props.value.gaji} inputProps={{min: 0, step: 1000}}
+            value={props.value.gaji} inputProps={{min: 0, step: 1000}} error={props.error.gaji}
             onChange={e => props.change('gaji', e.target.value, { type: 'MODAL_FORM' })} />
           <FormControl variant='standard' required fullWidth size='small'>
             <InputLabel id='select-tanggungan'>Tanggungan</InputLabel>
