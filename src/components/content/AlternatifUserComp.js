@@ -172,7 +172,7 @@ function AlternatifUserComp() {
         closeButton: false,
       })
     } else {
-      fetch('http://localhost:8000/alternatif/create', {
+      fetch('https://smart-method.herokuapp.com/alternatif/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
