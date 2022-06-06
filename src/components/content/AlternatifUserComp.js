@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Typography, TextField, FormControl, InputLabel, Select, MenuItem, Button, Stack, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton
 } from '@mui/material';
@@ -94,6 +94,18 @@ function AlternatifUserComp() {
     gaji: 500000,
     tanggungan: '',
   });
+
+  useEffect(() => {
+    fetch('https://www.randomlists.com/data/names-male.json', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(result => result.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+  })
 
   const changeHandler = (property, value, action) => {
     if (property === 'ipk') {
@@ -223,7 +235,7 @@ function AlternatifUserComp() {
           }
           return parseFloat(ipkValue);
         })(),
-        gaji: Math.round(Math.random() * 5000000),
+        gaji: Math.round(Math.random() * 5000) * 1000,
         tanggungan: (function () {
           let tanggunganValue = Math.round(Math.random() * 4);
           if (tanggunganValue === 0) {
