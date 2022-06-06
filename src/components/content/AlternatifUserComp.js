@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Typography, TextField, FormControl, InputLabel, Select, MenuItem, Button, Stack, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton
 } from '@mui/material';
@@ -77,6 +77,8 @@ const CustomLoadingButton = styled(LoadingButton)({
   }
 })
 
+const maleNames = require('../fake_names_males.json');
+
 function AlternatifUserComp() {
   const [id, setId] = useState(0);
   const [failed, setFailed] = useState({
@@ -94,18 +96,6 @@ function AlternatifUserComp() {
     gaji: 500000,
     tanggungan: '',
   });
-
-  useEffect(() => {
-    fetch('https://www.randomlists.com/data/names-male.json', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(result => result.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err));
-  })
 
   const changeHandler = (property, value, action) => {
     if (property === 'ipk') {
@@ -227,7 +217,7 @@ function AlternatifUserComp() {
     for (let item = 0; item < range; item++) {
       store.push({
         nim: '101910' + (item + 1),
-        nama: 'A'.concat(item + 1),
+        nama: maleNames.data[item],
         ipk: (function () {
           let ipkValue = (Math.random() * 4).toFixed(2);
           if (ipkValue < 2.5) {
