@@ -14,23 +14,17 @@ import {
 ChartJS.register(...registerables);
 
 const CustomFormControl = styled(FormControl)({
-  '& .MuiFormLabel-root': {
-    color: '#7d7e88',
+  '& .MuiInputLabel-root': {
+    color: '#474957',
     '&.Mui-focused': {
       color: 'white',
     }
   },
   '& .MuiOutlinedInput-root': {
     color: 'white',
-    '& .MuiSelect-icon, &.Mui-disabled': {
-      color: '#7d7e88',
+    '& .css-1d3z3hw-MuiOutlinedInput-notchedOutline': {
+      borderColor: '1px solid #474957!important',
     },
-    '& fieldset': {
-      borderColor: '#7d7e88',
-    },
-  },
-  '& :.MuiOutlinedInput-root:hover fieldset': {
-    borderColor: '2px solid red',
   }
 })
 

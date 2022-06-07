@@ -12,53 +12,55 @@ import { styled } from '@mui/material/styles';
 const CustomTextField = styled(TextField)({
   '& .MuiInputLabel-root': {
     color: '#474957',
-  },
-  '& label.Mui-focused': {
-    color: '#ffffff',
-  },
-  '& .MuiInputBase-root': {
-    '& input': {
+    '&.Mui-focused': {
       color: 'white',
+    }
+  },
+  '& .MuiOutlinedInput-root': {
+    color: 'white',
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#474957',
     },
-    '&.Mui-focused input': {
-      color: '#ffffff',
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      border: '2px solid #379fff'
     },
-    '&.Mui-focused fieldset, &:hover fieldset': {
-      borderColor: '#ffffff',
-    },
-    '&:hover:before': {
-      borderBottom: '2px solid #474957',
-    },
+    '&:hover fieldset': {
+      border: '2px solid #474957'
+    }
+  },
+  '& .MuiInput-root': {
+    color: 'white',
     '&:before': {
       borderBottom: '1px solid #474957',
     },
-    '&:after': {
-      borderBottom: '2px solid #ffffff',
+    '&:hover::before': {
+      borderBottom: '2px solid #474957!important',
+    },
+    '&.Mui-focused:after': {
+      borderBottom: '2px solid #379fff'
     }
-  },
-  '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#474957',
   }
 })
 const CustomFormControl = styled(FormControl)({
   '& .MuiInputLabel-root': {
     color: '#474957',
-  },
-  '& .MuiInputBase-root': {
-    '& .MuiSelect-select': {
+    '&.Mui-focused': {
       color: 'white',
-    },
-    '&.Mui-focused .MuiSelect-select': {
-      backgroundColor: 'transparent',
-    },
+    }
+  },
+  '& .MuiInput-root': {
+    color: 'white',
     '&:before': {
-      borderBottom: '1px solid #474957'
+      borderBottom: '1px solid #474957',
     },
-    '&:hover:before': {
-      borderBottom: '2px solid #474957',
+    '&:hover::before': {
+      borderBottom: '2px solid #474957!important',
     },
     '&.Mui-focused:after': {
-      borderBottom: '2px solid white'
+      borderBottom: '2px solid #379fff'
+    },
+    '& .MuiInput-input:focus': {
+      backgroundColor: 'transparent',
     }
   }
 })
